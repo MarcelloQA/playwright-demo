@@ -7,8 +7,8 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "playwright": "npx playwright test",
-    "playwright:report": "npx playwright show-report"
+    "test": "npx playwright test",
+    "test:report": "npx playwright show-report"
   },
   "repository": {
     "type": "git",

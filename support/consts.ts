@@ -33,3 +33,11 @@ export const URLS = {
   BASE_URL: "/",
   PRODUCTS_URL: "/inventory.html",
 };
+
+export const ERROR_MESSAGES = {
+  NO_USERNAME: "Epic sadface: Username is required",
+  NO_PASSWORD: "Epic sadface: Password is required",
+  NO_USER:
+    "Epic sadface: Username and password do not match any user in this service",
+  LOCKED: "Epic sadface: Sorry, this user has been locked out.",
+};
