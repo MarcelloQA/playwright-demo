@@ -1,95 +1,49 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { ERROR_MESSAGES, URLS, USERS } from "../support/consts";
+import { User, ErrorMessage } from "@interfaces";
+import { urls } from "@consts/urls";
 
-export class Login {
-  readonly page: Page;
-  readonly userNameInput: Locator;
-  readonly passwordInput: Locator;
-  readonly loginButton: Locator;
-  readonly errorMessage: Locator;
-  readonly errorButton: Locator;
+export class LoginPage {
+	readonly page: Page;
+	readonly userNameInput: Locator;
+	readonly passwordInput: Locator;
+	readonly loginButton: Locator;
+	readonly errorMessage: Locator;
+	readonly errorButton: Locator;
 
-  constructor(page: Page) {
-    this.page = page;
-    this.userNameInput = page.getByTestId("username");
-    this.passwordInput = page.getByTestId("password");
-    this.loginButton = page.getByTestId("login-button");
-    this.errorMessage = page.getByTestId("error");
-    this.errorButton = page.getByTestId("error").getByRole("button");
-  }
-  async goToBaseUrl() {
-    await this.page.goto(URLS.BASE_URL);
-  }
+	constructor(page: Page) {
+		this.page = page;
+		this.userNameInput = page.getByTestId("username");
+		this.passwordInput = page.getByTestId("password");
+		this.loginButton = page.getByTestId("login-button");
+		this.errorMessage = page.getByTestId("error");
+		this.errorButton = page.getByTestId("error").getByRole("button");
+	}
+	async goToBaseUrl() {
+		await this.page.goto(urls.baseUrl);
+	}
 
-  async enterValidUserName() {
-    await this.userNameInput.fill(USERS.VALID_USER.username);
-  }
+	async enterCredentials(usere: User) {
+		await this.userNameInput.fill(usere.username);
+		await this.passwordInput.fill(usere.password);
+	}
 
-  async enterInvalidUserName() {
-    await this.userNameInput.fill(USERS.INVALID_USER.username);
-  }
+	async dismissErrorMessage() {
+		await this.errorButton.click();
+	}
 
-  async enterLockedUserName() {
-    await this.userNameInput.fill(USERS.LOCKED_USER.username);
-  }
+	async clickLoginButton() {
+		await this.loginButton.click();
+	}
 
-  async enterValidPassword() {
-    await this.passwordInput.fill(USERS.VALID_USER.password);
-  }
-
-  async enterInvalidPassword() {
-    await this.passwordInput.fill(USERS.INVALID_USER.password);
-  }
-
-  async enterLockedPassword() {
-    await this.passwordInput.fill(USERS.LOCKED_USER.password);
-  }
-
-  async enterValidCredentials() {
-    await this.enterValidPassword();
-    await this.enterValidUserName();
-  }
-
-  async enterInvalidCredentials() {
-    await this.enterInvalidPassword();
-    await this.enterInvalidUserName();
-  }
-
-  async enterLockedCredentials() {
-    await this.enterLockedPassword();
-    await this.enterLockedUserName();
-  }
-
-  async dismissErrorMessage() {
-    await this.errorButton.click();
-  }
-
-  async clickLoginButton() {
-    await this.loginButton.click();
-  }
-
-  async verifyIfLogged() {
-    await expect(this.page).toHaveURL(URLS.PRODUCTS_URL);
-  }
-
-  async verifyIfNotLogged() {
-    await expect(this.page).not.toHaveURL(URLS.PRODUCTS_URL);
-    await expect(this.page).toHaveURL(URLS.BASE_URL);
-  }
-
-  async verifyPasswordErrorMessage() {
-    await expect(this.errorMessage).toHaveText(ERROR_MESSAGES.NO_PASSWORD);
-  }
-
-  async verifyUserNameErrorMessage() {
-    await expect(this.errorMessage).toHaveText(ERROR_MESSAGES.NO_USERNAME);
-  }
-
-  async verifyNoUserErrorMessage() {
-    await expect(this.errorMessage).toHaveText(ERROR_MESSAGES.NO_USER);
-  }
-
-  async verifyLockedErrorMessage() {
-    await expect(this.errorMessage).toHaveText(ERROR_MESSAGES.LOCKED);
-  }
+	async verifyIfLoggedIn(isLoggedIn: boolean) {
+		if (isLoggedIn) {
+			await expect(this.page).toHaveURL(urls.productUrl);
+		} else {
+			await expect(this.page).not.toHaveURL(urls.productUrl);
+			await expect(this.page).toHaveURL(urls.baseUrl);
+		}
+	}
+	async verifyErrorMessage(errorMessage: ErrorMessage) {
+		await expect(this.errorMessage).toHaveText(errorMessage.message);
+	}
 }
