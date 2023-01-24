@@ -18,7 +18,7 @@ jobs:
             - name: Install Playwright Browsers
               run: npx playwright install --with-deps
             - name: Run Playwright tests
-              run: $USERNAME $PASSWORD npx playwright test
+              run: ${{ vars.USERNAME }} ${{ vars.PASSWORD }} ${{ vars.PERFORMANCE_GLITCH_USER }} ${{ vars.LOCKED_USER }} ${{ vars.PROBLEM_USER}} npx playwright test
             - uses: actions/upload-artifact@v3
               if: always()
               with:
