@@ -22,9 +22,9 @@ export class LoginPage {
 		await this.page.goto(urls.baseUrl);
 	}
 
-	async enterCredentials(usere: User) {
-		await this.userNameInput.fill(usere.username);
-		await this.passwordInput.fill(usere.password);
+	async enterCredentials(user: User) {
+		await this.userNameInput.fill(user.username);
+		await this.passwordInput.fill(user.password);
 	}
 
 	async dismissErrorMessage() {

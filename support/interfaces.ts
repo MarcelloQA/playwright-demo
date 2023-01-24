@@ -6,3 +6,7 @@ export interface User {
 export interface ErrorMessage {
 	message: string;
 }
+
+export interface SortOption {
+	option: string;
+}
